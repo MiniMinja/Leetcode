@@ -76,6 +76,7 @@ private:
 			after->prev = before;
 		}
 		tomove->next = head;
+		tomove->prev = NULL;
 		head->prev = tomove;
 		head = head->prev;
 	}
@@ -160,4 +161,7 @@ int main(){
 	c.put(4, 4);
 	c.get(1);
 	//case updating values
+	c.put(3, 5);
+	c.printSelf();
+	std::cout << "value in 3 is " << c.get(3) << std::endl;
 }

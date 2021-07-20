@@ -3,11 +3,13 @@
 
 class Node{
 public:
+	int k;
 	int data;
 	Node* prev;
 	Node* next;
 
 	Node(int d){
+		k = 0;
 		this->data = d;
 		prev = NULL;
 		next = NULL;
@@ -23,8 +25,9 @@ private:
 	Node* tail;
 	std::unordered_map<int, Node*> m;
 
-	void insertHead(int val){
+	void insertHead(int k, int val){
 		Node* toadd = new Node(val);
+		toadd->k = k;
 		if(head == NULL){
 			head = toadd;
 			tail = head;
@@ -45,8 +48,10 @@ private:
 			return;
 		}
 		if(head == tail){
+			Node* todelete = head;
 			head = NULL;
 			tail = NULL;
+			delete todelete;
 		}
 		else{
 			Node* toremove = tail;
@@ -101,15 +106,24 @@ public:
 	}
 
 	void put(int key, int value){
-		if(size < cap){
-			insertHead(value);
-			size++;	
+		if(m.find(key) == m.end()){
+			if(size < cap){
+				insertHead(key, value);
+				size++;	
+			}
+			else{
+				int keytorem = tail->k;
+				m.erase(keytorem);
+				removeTail();
+				insertHead(key, value);
+			}
+			
+			m.insert({key, head});
 		}
 		else{
-			removeTail();
-			insertHead(value);
+			m[key]->data = value;
+			moveNode(m[key]);
 		}
-		m.insert({key, head});
 	}
 	
 	void printSelf(){
@@ -135,23 +149,15 @@ public:
 
 int main(){
 	LRUCache c(2);
-	std::cout << "Added 1:1" << std::endl;
-	c.put(1, 1);
-	c.printSelf();
-
-	std::cout << "Added 2:2" << std::endl;
+	c.put(1,1);
 	c.put(2, 2);
 	c.printSelf();
-
-	std::cout << "Got 1:1" << std::endl;
 	c.get(1);
+	c.put(3,3);
 	c.printSelf();
-
-	std::cout << "Added 3:3" << std::endl;
-	c.put(3, 3);
+	c.get(2);
 	c.printSelf();
-
-	std::cout << "Got 3:3" << std::endl;
-	c.get(3);
-	c.printSelf();
+	c.put(4, 4);
+	c.get(1);
+	//case updating values
 }

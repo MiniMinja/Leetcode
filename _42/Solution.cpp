@@ -24,6 +24,12 @@ class Solution{
 					b = i;
 				}
 			}
+			if(highest1 == 0){
+				a = -1;
+			}
+			if(highest2 == 0){
+				b = -1;
+			}
 		}
 
 		int area(vector<int>& height, int start, int end){
@@ -42,12 +48,16 @@ class Solution{
 			int index2 = end;
 
 			max2(height, start, end, index1, index2);
+			if(index1 == -1 || index2 == -1) return 0;
+			else if(height[index1] == 0 || height[index2] == 0) return 0;
+			
 			//make index1 always left of index2
 			if(index2 < index1){
 				int temp = index1;
 				index1 = index2;
 				index2 = temp;
 			}
+			cout << "index1: " << index1 << " index2: " << index2 << endl;
 			
 			//iterate throught index1-index2 and calculate the area
 			int a = area(height, index1, index2);
